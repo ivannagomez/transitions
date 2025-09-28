@@ -1,0 +1,60 @@
+export const sceneData = [
+  {
+    id: 1,
+    bgdImage: '/images/transition-study/bgd-2.png',
+    bgdsImage: '/images/transition-study/bgds-1.png',
+    ppImage: '/images/transition-study/pp-1.png',
+    title: 'transitions',
+    subtitle: 'an ivanna study on viewport transition coding, ai image model training, and creative world building',
+    isLanding: true,
+  },
+  {
+    id: 2,
+    bgdImage: '/images/transition-study/bgd-3.png',
+    bgdsImage: '/images/transition-study/bgds-2.png',
+    ppImage: '/images/transition-study/pp-2.png',
+  },
+  {
+    id: 3,
+    bgdImage: '/images/transition-study/bgd-4.png',
+    bgdsImage: '/images/transition-study/bgds-3.png',
+    ppImage: '/images/transition-study/pp-3.png',
+  },
+  {
+    id: 4,
+    bgdImage: '/images/transition-study/bgd-5.png',
+    bgdsImage: '/images/transition-study/bgds-4.png',
+    ppImage: '/images/transition-study/pp-4.png',
+  },
+  {
+    id: 5,
+    bgdImage: '/images/transition-study/bgd-6.png',
+    bgdsImage: '/images/transition-study/bgds-5.png',
+    ppImage: '/images/transition-study/pp-5.png',
+  },
+  {
+    id: 6,
+    bgdImage: '/images/transition-study/bgd-7.png',
+    bgdsImage: '/images/transition-study/bgds-6.png',
+    ppImage: '/images/transition-study/pp-6.png',
+  },
+  {
+    id: 7,
+    bgdImage: '/images/transition-study/bgd-8.png',
+    bgdsImage: '/images/transition-study/bgds-7.png',
+    ppImage: '/images/transition-study/pp-7.png',
+  },
+  {
+    id: 8,
+    bgdImage: '/images/transition-study/bgd-9.png',
+    bgdsImage: '/images/transition-study/bgds-8.png',
+    ppImage: '/images/transition-study/pp-8.png',
+  },
+  {
+    id: 9,
+    bgdImage: null,
+    bgdsImage: '/images/transition-study/bgds-9.png',
+    ppImage: '/images/transition-study/pp-9.png',
+    isLastScene: true,
+  },
+];
