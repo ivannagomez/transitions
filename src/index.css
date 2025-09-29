@@ -137,8 +137,9 @@ body {
 }
 
 .landing-title-div {
-  top: 41%;
+  top: 35%;
   right: 5%;
+  left: auto !important;
   color: #e1bc49;
   width: 70%;
   max-width: 70%;
@@ -147,6 +148,8 @@ body {
   flex-direction: column;
   align-content: flex-end;
   flex-wrap: wrap;
+  background: transparent !important;
+  backdrop-filter: none !important;
 }
 
 .landing-title-div h1 {
@@ -164,4 +167,9 @@ body {
   font-weight: 600;
   line-height: 1.1;
   font-size: 18px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-top: 10px;
 }

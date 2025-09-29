@@ -22,7 +22,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-3.png',
     ppImage: '/images/transition-study/pp-3.png',
     title: 'Dataset Curation',
-    content: 'I trained a lightweight, focused model rather than using massive general collection models. Careful curation meant selecting images that shared visual DNA—similar brush techniques, color palettes, and artistic approaches that could inform consistent style generation.',
+    content: 'I trained a lightweight, focused model rather than using massive general collection models. Careful curation meant selecting images that shared visual DNA, similar brush techniques, color palettes, and artistic approaches that could inform consistent style generation.',
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-5.png',
     ppImage: '/images/transition-study/pp-5.png',
     title: 'The Hard Part',
-    content: 'Getting consistency across frames—pose, materials, stroke weight—proved far more challenging than generating a single pretty image. Each frame needs to honor the previous while introducing natural variation. Too much consistency feels robotic; too little breaks the world.',
+    content: 'Getting consistency across frames, pose, materials, stroke weight—proved far more challenging than generating a single pretty image. Each frame needs to honor the previous while introducing natural variation. Too much consistency feels robotic, too little breaks the world.',
   },
   {
     id: 6,
@@ -54,7 +54,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-7.png',
     ppImage: '/images/transition-study/pp-7.png',
     title: 'World Building',
-    content: 'Character identity and environmental consistency became the foundation for visual storytelling. When AI maintains context across frames, it opens possibilities for coherent world-building—each image contributing to a larger narrative rather than standing alone.',
+    content: 'Character identity and environmental consistency became the foundation for visual storytelling. When AI maintains context across frames, it opens possibilities for coherent world building, each image contributing to a larger narrative rather than standing alone.',
   },
   {
     id: 8,
@@ -62,7 +62,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-8.png',
     ppImage: '/images/transition-study/pp-8.png',
     title: 'Key Insights',
-    content: 'This project taught me the crucial balance between prompts and constraints. Data curation matters more than volume. Context preservation is everything. The challenge isn\'t just generating art—it\'s generating art that feels intentional and connected.',
+    content: 'This project taught me the crucial balance between prompts and constraints. Data curation matters more than volume. Context preservation is everything. The challenge isn\'t just generating art, it\'s generating art that feels intentional and connected.',
   },
   {
     id: 9,
