@@ -59,24 +59,25 @@ body {
 
 .pp-img {
   height: auto;
-  width: 100%;
+  width: calc(100%);
   object-position: center;
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
+  left: 0;
+  transform: translateY(100%);
   opacity: 0;
   transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-in-out;
   z-index: 4;
+  pointer-events: none;
 }
 
 .pp-img.enter {
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
   opacity: 1;
 }
 
 .pp-img.exit {
-  transform: translateX(-50%) translateY(100%);
+  transform: translateY(100%);
   opacity: 0;
 }
 

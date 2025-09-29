@@ -11,11 +11,68 @@ function App() {
   const currentTextSceneRef = useRef(1);
   const lastScrollTopRef = useRef(0);
   const scrollTimerRef = useRef(null);
+  const isAutoScrollingRef = useRef(false);
+  const autoScrollTimeoutRef = useRef(null);
+  const targetPositionsRef = useRef({});
+  const currentSceneIndexRef = useRef(0); // Track current scene index (0-8)
+  const isTransitioningRef = useRef(false);
+  const scrollDebounceRef = useRef(null);
 
   useEffect(() => {
     // PP Image Animator
     const ppImages = ppImagesRef.current;
     const sections = sectionsRef.current;
+    const container = containerRef.current;
+
+    // Calculate all scene positions for smooth scene-to-scene navigation
+    const calculateScenePositions = () => {
+      const scenePositions = [];
+
+      sections.forEach((section, index) => {
+        if (section) {
+          const sectionTop = section.offsetTop;
+
+          if (index === 0) {
+            // First scene starts at top
+            scenePositions[0] = 0;
+          } else {
+            // For other scenes, position to show bgd optimally
+            // Adjust for negative margins and optimal viewing
+            const targetPosition = sectionTop + (container.clientHeight * 0.05); // 5% offset
+            scenePositions[index] = Math.max(0, targetPosition);
+          }
+
+          console.log(`Scene ${index} position:`, scenePositions[index], 'sectionTop:', sectionTop);
+        }
+      });
+
+      targetPositionsRef.current = scenePositions;
+      console.log('All scene positions calculated:', scenePositions);
+    };
+
+    const goToScene = (sceneIndex) => {
+      const targetPosition = targetPositionsRef.current[sceneIndex];
+      if (targetPosition !== undefined && container && !isTransitioningRef.current) {
+        console.log(`Transitioning to scene ${sceneIndex} at position ${targetPosition}`);
+
+        isTransitioningRef.current = true;
+        currentSceneIndexRef.current = sceneIndex;
+
+        container.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+
+        // Reset transition flag after animation completes
+        autoScrollTimeoutRef.current = setTimeout(() => {
+          isTransitioningRef.current = false;
+          console.log(`Transition to scene ${sceneIndex} completed`);
+        }, 1000); // 1 second for smooth scroll to complete
+      }
+    };
+
+    // Calculate positions after a short delay to ensure layout is complete
+    setTimeout(calculateScenePositions, 500);
 
     // Initialize - first pp-img visible, others hidden
     ppImages.forEach((ppImg, index) => {
@@ -62,6 +119,8 @@ function App() {
                 newPpImg.classList.add('enter');
                 console.log(`PP-${sceneNum} is now visible`);
               }
+
+              // Auto-scroll trigger moved to bgds observer
 
               currentSceneNumRef.current = sceneNum;
             }
@@ -134,12 +193,51 @@ function App() {
       }
     });
 
+    // Create observer for bgds images to trigger auto-scroll
+    const bgdsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Find the parent section to get scene number
+          const parentSection = entry.target.closest('.bgd-section');
+          if (parentSection) {
+            const sceneId = parentSection.id;
+            const match = sceneId.match(/scene-(\d+)/);
+
+            if (match) {
+              const sceneNum = parseInt(match[1], 10);
+              console.log(`BGDS image for scene ${sceneNum} entered viewport`);
+
+              // Update current scene index when bgds enters viewport
+              currentSceneIndexRef.current = sceneNum - 1; // Convert to 0-based index
+              console.log(`Current scene index updated to: ${currentSceneIndexRef.current}`)
+            }
+          }
+        }
+      });
+    }, {
+      threshold: 0.3, // Trigger when 30% of bgds image is visible
+      rootMargin: '0px'
+    });
+
+    // Observe all bgds images
+    sections.forEach(section => {
+      if (section) {
+        const bgdsImg = section.querySelector('.bgds-img');
+        if (bgdsImg) {
+          bgdsObserver.observe(bgdsImg);
+          console.log('Observing bgds image in section:', section.id);
+        }
+      }
+    });
+
     // Parallax effect on scroll
-    const container = containerRef.current;
 
     const handleScroll = () => {
+      if (!container) return;
       const scrollTop = container.scrollTop;
       const scrollDirection = scrollTop > lastScrollTopRef.current ? 'down' : 'up';
+
+      console.log('Scroll event fired:', scrollDirection, 'scrollTop:', scrollTop);
 
       // Clear previous timer
       if (scrollTimerRef.current) {
@@ -175,8 +273,59 @@ function App() {
       lastScrollTopRef.current = scrollTop;
     };
 
+    const handleWheel = (e) => {
+      // Prevent default scrolling completely
+      e.preventDefault();
+
+      // Don't handle during transitions
+      if (isTransitioningRef.current) {
+        console.log('Wheel event ignored - transition in progress');
+        return;
+      }
+
+      // Clear any existing debounce timer
+      if (scrollDebounceRef.current) {
+        clearTimeout(scrollDebounceRef.current);
+      }
+
+      // Debounce scroll events to prevent rapid firing
+      scrollDebounceRef.current = setTimeout(() => {
+        const currentIndex = currentSceneIndexRef.current;
+        const totalScenes = sectionsRef.current.length;
+
+        console.log('Scroll direction:', e.deltaY > 0 ? 'down' : 'up', 'Current scene:', currentIndex);
+
+        if (e.deltaY > 0) {
+          // Scroll down - go to next scene
+          const nextIndex = Math.min(currentIndex + 1, totalScenes - 1);
+          if (nextIndex !== currentIndex) {
+            console.log(`Going to next scene: ${nextIndex}`);
+            goToScene(nextIndex);
+          }
+        } else {
+          // Scroll up - go to previous scene
+          const prevIndex = Math.max(currentIndex - 1, 0);
+          if (prevIndex !== currentIndex) {
+            console.log(`Going to previous scene: ${prevIndex}`);
+            goToScene(prevIndex);
+          }
+        }
+      }, 100); // 100ms debounce
+    };
+
+    const handleMouseEnter = () => {
+      if (container) {
+        container.focus();
+        console.log('Container focused');
+      }
+    };
+
     if (container) {
       container.addEventListener('scroll', handleScroll, { passive: true });
+      container.addEventListener('wheel', handleWheel, { passive: false }); // Allow preventDefault
+      container.addEventListener('mouseenter', handleMouseEnter);
+      console.log('Event listeners attached to container');
+      console.log('Container dimensions - scrollHeight:', container.scrollHeight, 'clientHeight:', container.clientHeight, 'scrollable:', container.scrollHeight > container.clientHeight);
     }
 
     // Force check initial visibility after a short delay
@@ -217,17 +366,33 @@ function App() {
     return () => {
       if (observer) observer.disconnect();
       if (textObserver) textObserver.disconnect();
+      if (bgdsObserver) bgdsObserver.disconnect();
       if (container) {
         container.removeEventListener('scroll', handleScroll);
+        container.removeEventListener('wheel', handleWheel);
+        container.removeEventListener('mouseenter', handleMouseEnter);
+        console.log('Event listeners removed from container');
       }
       if (scrollTimerRef.current) {
         clearTimeout(scrollTimerRef.current);
+      }
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current);
+      }
+      if (scrollDebounceRef.current) {
+        clearTimeout(scrollDebounceRef.current);
       }
     };
   }, []);
 
   return (
-    <div className="container" id="container" ref={containerRef}>
+    <div
+      className="container"
+      id="container"
+      ref={containerRef}
+      tabIndex={-1}
+      style={{ outline: 'none' }}
+    >
       <div className="scene" data-scene="1">
         {sceneData.map((scene, index) => (
           <Scene
