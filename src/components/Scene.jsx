@@ -21,6 +21,9 @@ const Scene = forwardRef(({ scene }, ref) => {
         <div className="scene-text landing-title-div" data-scene="1">
           <h1>{scene.title}</h1>
           <p>{scene.subtitle}</p>
+          <p style={{ fontSize: '14px', marginTop: '10px' }}>
+            [this is still an in progress study project]
+          </p>
         </div>
       ) : (
         <div className="scene-text" data-scene={scene.id}>
