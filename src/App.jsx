@@ -17,6 +17,7 @@ function App() {
   const currentSceneIndexRef = useRef(0); // Track current scene index (0-8)
   const isTransitioningRef = useRef(false);
   const scrollDebounceRef = useRef(null);
+  const animationFrameRef = useRef(null);
 
   useEffect(() => {
     // PP Image Animator
@@ -50,6 +51,37 @@ function App() {
       console.log('All scene positions calculated:', scenePositions);
     };
 
+    // Custom smooth scroll with easing
+    const smoothScrollTo = (targetPosition, duration = 1800) => {
+      const startPosition = container.scrollTop;
+      const distance = targetPosition - startPosition;
+      const startTime = performance.now();
+
+      // Easing function for natural acceleration/deceleration
+      const easeInOutCubic = (t) => {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      };
+
+      const animate = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeInOutCubic(progress);
+
+        const currentPosition = startPosition + (distance * easedProgress);
+        container.scrollTop = currentPosition;
+
+        if (progress < 1) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+        } else {
+          // Animation completed
+          isTransitioningRef.current = false;
+          console.log(`Smooth scroll animation completed`);
+        }
+      };
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
     const goToScene = (sceneIndex) => {
       const targetPosition = targetPositionsRef.current[sceneIndex];
       if (targetPosition !== undefined && container && !isTransitioningRef.current) {
@@ -58,16 +90,13 @@ function App() {
         isTransitioningRef.current = true;
         currentSceneIndexRef.current = sceneIndex;
 
-        container.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
+        // Cancel any existing animation
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
 
-        // Reset transition flag after animation completes
-        autoScrollTimeoutRef.current = setTimeout(() => {
-          isTransitioningRef.current = false;
-          console.log(`Transition to scene ${sceneIndex} completed`);
-        }, 1000); // 1 second for smooth scroll to complete
+        // Start custom smooth scroll animation
+        smoothScrollTo(targetPosition, 1800); // 1.8 second duration
       }
     };
 
@@ -381,6 +410,9 @@ function App() {
       }
       if (scrollDebounceRef.current) {
         clearTimeout(scrollDebounceRef.current);
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, []);
