@@ -27,7 +27,8 @@ const Scene = forwardRef(({ scene }, ref) => {
         </div>
       ) : (
         <div className="scene-text" data-scene={scene.id}>
-          {/* Empty for now, matching original HTML */}
+          {scene.title && <h2>{scene.title}</h2>}
+          {scene.content && <p>{scene.content}</p>}
         </div>
       )}
     </section>
