@@ -5,7 +5,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-1.png',
     ppImage: '/images/transition-study/pp-1.png',
     title: 'transitions',
-    subtitle: 'an ivanna study on viewport transition coding, ai image model training, and creative world building',
+    subtitle: 'an ivanna study on ai image model training, creative world building, and viewport transition coding',
     isLanding: true,
   },
   {
@@ -38,7 +38,7 @@ export const sceneData = [
     bgdsImage: '/images/transition-study/bgds-5.png',
     ppImage: '/images/transition-study/pp-5.png',
     title: 'The Hard Part',
-    content: 'Getting consistency across frames, pose, materials, stroke weight—proved far more challenging than generating a single pretty image. Each frame needs to honor the previous while introducing natural variation. Too much consistency feels robotic, too little breaks the world.',
+    content: 'Getting consistency across frames, pose, materials, stroke weight, proved far more challenging than generating a single pretty image. Each frame needs to honor the previous while introducing natural variation. Too much consistency feels robotic, too little breaks the world.',
   },
   {
     id: 6,

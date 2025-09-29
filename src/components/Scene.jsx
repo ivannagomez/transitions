@@ -22,11 +22,11 @@ const Scene = forwardRef(({ scene }, ref) => {
           <h1>{scene.title}</h1>
           <p>{scene.subtitle}</p>
           <p style={{ fontSize: '14px', marginTop: '10px' }}>
-            [this is still an in progress study project]
+            this is still an in progress study project and this is meant to just showcase some of the results of my exploration so far
           </p>
         </div>
       ) : (
-        <div className="scene-text" data-scene={scene.id}>
+        <div className={`scene-text ${scene.id === 6 ? 'scene-text-top' : ''}`} data-scene={scene.id}>
           {scene.title && <h2>{scene.title}</h2>}
           {scene.content && <p>{scene.content}</p>}
         </div>
