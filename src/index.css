@@ -177,5 +177,16 @@ body {
 
 .scene-text-top {
   top: 5% !important;
+  z-index: 5 !important;
   transform: translateY(0) !important;
+}
+
+@media (max-width: 1000px) {
+  .scene-text {
+    z-index: 5 !important;
+  }
+
+  .landing-title-div {
+    z-index: 5 !important;
+  }
 }
